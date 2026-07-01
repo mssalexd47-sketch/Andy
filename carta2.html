@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>Un mes después</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500;1,600;1,700&family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- =========================================================
+     SPRITE SVG: mismos gradientes, filtro y flores que la
+     página principal, reutilizables con <use>.
+     ========================================================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="petalGradient" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="115">
+      <stop offset="0%"  stop-color="#f2fbff"/>
+      <stop offset="45%" stop-color="#9fd4f7"/>
+      <stop offset="100%" stop-color="#1f6fb2"/>
+    </radialGradient>
+    <radialGradient id="petalGradientInner" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="95">
+      <stop offset="0%"  stop-color="#ffffff"/>
+      <stop offset="50%" stop-color="#bfe3ff"/>
+      <stop offset="100%" stop-color="#4a9fe0"/>
+    </radialGradient>
+    <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Una flor de lirio, centrada en (0,0) -->
+    <symbol id="lilyBloom" viewBox="-130 -130 260 260">
+      <g filter="url(#softGlow)">
+        <g fill="url(#petalGradient)" stroke="#eaf6ff" stroke-width="1" stroke-opacity="0.6">
+          <path d="M0,0 C-19,-15 -24,-58 -7,-100 C-3,-114 3,-114 7,-100 C24,-58 19,-15 0,0 Z" transform="rotate(0)"/>
+          <path d="M0,0 C-19,-15 -24,-58 -7,-100 C-3,-114 3,-114 7,-100 C24,-58 19,-15 0,0 Z" transform="rotate(120)"/>
+          <path d="M0,0 C-19,-15 -24,-58 -7,-100 C-3,-114 3,-114 7,-100 C24,-58 19,-15 0,0 Z" transform="rotate(240)"/>
+        </g>
+        <g fill="url(#petalGradientInner)" stroke="#ffffff" stroke-width="1" stroke-opacity="0.7">
+          <path d="M0,0 C-15,-13 -19,-48 -6,-84 C-2,-96 2,-96 6,-84 C19,-48 15,-13 0,0 Z" transform="rotate(60)"/>
+          <path d="M0,0 C-15,-13 -19,-48 -6,-84 C-2,-96 2,-96 6,-84 C19,-48 15,-13 0,0 Z" transform="rotate(180)"/>
+          <path d="M0,0 C-15,-13 -19,-48 -6,-84 C-2,-96 2,-96 6,-84 C19,-48 15,-13 0,0 Z" transform="rotate(300)"/>
+        </g>
+        <g fill="none" stroke="#e7842f" stroke-width="2.4" stroke-linecap="round">
+          <path d="M0,0 Q10,-30 5,-54" transform="rotate(20)"/>
+          <path d="M0,0 Q10,-30 5,-54" transform="rotate(85)"/>
+          <path d="M0,0 Q10,-30 5,-54" transform="rotate(150)"/>
+          <path d="M0,0 Q10,-30 5,-54" transform="rotate(215)"/>
+          <path d="M0,0 Q10,-30 5,-54" transform="rotate(280)"/>
+          <path d="M0,0 Q10,-30 5,-54" transform="rotate(340)"/>
+        </g>
+        <g fill="#c8571f">
+          <ellipse cx="1.7" cy="-53" rx="3.2" ry="6" transform="rotate(20)"/>
+          <ellipse cx="1.7" cy="-53" rx="3.2" ry="6" transform="rotate(85)"/>
+          <ellipse cx="1.7" cy="-53" rx="3.2" ry="6" transform="rotate(150)"/>
+          <ellipse cx="1.7" cy="-53" rx="3.2" ry="6" transform="rotate(215)"/>
+          <ellipse cx="1.7" cy="-53" rx="3.2" ry="6" transform="rotate(280)"/>
+          <ellipse cx="1.7" cy="-53" rx="3.2" ry="6" transform="rotate(340)"/>
+        </g>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- Fondo ambiental de destellos, sobre el mismo azul profundo -->
+<div class="sparkles" aria-hidden="true"></div>
+
+<!-- =========================================================
+     HEADER: botón para escuchar la carta + control de tiempo
+     ========================================================= -->
+<header class="audio-header">
+  <button id="listen-btn" class="btn btn--primary btn--listen" type="button">
+    <span class="note-icon" aria-hidden="true">♪</span>
+    <span id="listen-btn-text">Escúchame leer esta carta</span>
+  </button>
+
+  <div class="audio-scrubber">
+    <span class="audio-time" id="current-time">0:00</span>
+    <input
+      type="range"
+      id="audio-seek"
+      class="audio-seek"
+      min="0"
+      max="100"
+      value="0"
+      step="0.1"
+      aria-label="Buscar un momento del audio"
+    >
+    <span class="audio-time audio-time--end" id="total-time">0:00</span>
+  </div>
+
+  <div class="volume-control">
+    <span class="volume-icon" id="volume-icon" aria-hidden="true">🔊</span>
+    <input
+      type="range"
+      id="volume-seek"
+      class="audio-seek volume-seek"
+      min="0"
+      max="100"
+      value="80"
+      aria-label="Volumen del audio"
+    >
+  </div>
+
+  <!-- Reemplaza carta.mp3 por el audio real donde la lees en voz alta -->
+  <audio id="letter-audio" src="carta.mp3" preload="metadata"></audio>
+</header>
+
+<p class="scroll-hint scroll-hint--big">Sigue bajando, léela tú misma también <span aria-hidden="true">↓</span></p>
+
+<main>
+
+  <!-- ===== La carta ===== -->
+  <section id="letter-screen" class="screen screen--letter">
+    <div class="glass-card letter-card">
+      <svg class="lily lily--divider" aria-hidden="true"><use href="#lilyBloom"/></svg>
+
+      <p class="eyebrow">Un mes después</p>
+
+      <div class="letter-text">
+        <p class="letter-greeting">Mi amor,</p>
+        <p>Sé que ha pasado tiempo y que hoy día cumplíamos un mes. Un mes el cual hemos vivido bastante y que ahora se ha transformado en un vacío total. No sé cómo expresar todo lo que siento en este momento, no sé cómo decir que esto duele tanto, que quema por dentro.</p>
+        <p>Pero solo puedo recordarte algo. Aquella primera vez que nos vimos, aquel primer hola, aquel primer todo. Aún me acuerdo con una claridad que me desarma de cuando te vi por primera vez, de la magia y los nervios de cuando nos llamamos aquella noche, del calor de ese primer abrazo y de la timidez de ese primer beso que lo cambió todo para mí. Me resuena en la mente ese primer te amo y ese primer te quiero que nos dijimos con el corazón en la mano.</p>
+        <p>Extraño tanto el "ya gracias" que me decías todo el tiempo, con esa ternura tuya, y esas llamadas incontables que nos teníamos en la noche, donde el mundo exterior dejaba de existir y solo importábamos los dos.</p>
+        <p>La he pasado bastante bien contigo, Andrea. Me has formado, en pocas palabras. Tú has conocido y has sido parte fundamental del cambio que yo he tenido; de simplemente ser un estudiante a alguien que hace estas cosas ahora por ti. Alguien que buscaba siempre la forma de demostrarte su amor, de hacerte webs, de programar solo para sacarte una sonrisa.</p>
+        <p>Por eso te lo digo hoy con toda la certeza del alma: mi amor por ti se va a acabar cuando yo ya no quiera programar, cuando yo ya no quiera contar chistes, cuando yo ya no quiera bailar. Cuando yo ya no sea yo mismo. Porque la verdad es que tú me haces ser yo mismo. Yo te amo. Yo aún te amo con fuerzas que no sabía que tenía. Yo quiero seguir, quiero continuar con todo lo que planeamos porque te amo, porque eres y seguirás siendo lo mejor de mi vida.</p>
+        <p>En serio, créeme que me arrepiento de todo lo que pasó, de todo lo que hice, de cada error que nos trajo hasta este punto. No sabes cuánto daría por una sola noche más contigo.</p>
+        <p>Te pienso a cada segundo, y en mi mente solo suena "Otra noche sin ti" de Los Dos Románticos. Me pregunta el corazón extrañando tu boca... es otra noche sin ti, pero tan a solas, pero tan a solas. Es una noche que la paso bastante mal, abrazando tu ausencia.</p>
+        <p>Y te escribo esta carta quizás con lágrimas en los ojos, con el alma rota. No sabes la contención tan grande que hago a diario por no desmoronarme en el colegio. Hay momentos en los que el peso es tanto que solo miro abajo y digo para mis adentros: "Quisiera estar con ella". Me duele bastante, Andrea, me duele el cuerpo y el espíritu.</p>
+        <p>Pero en serio, te amaba, Andrea. Eras lo mejor de mi vida. Y pongo esto en presente porque aún quiero continuar contigo, yo lo quiero todo a tu lado.</p>
+        <p>Esta carta es algo pequeño en papel, pero viene cargada de un sentimiento inmenso, puro y real. Esto lo hice exclusivamente para ti; quería, tenía la ilusión de darte esta hermosa sorpresa justo un primero, celebrando nuestro mes... Y lo siento. Lo siento mucho, de todo corazón.</p>
+      </div>
+
+      <p class="letter-signature">Con todo mi cariño,<br><span class="fill-in">Mauricio</span></p>
+    </div>
+
+    <p class="scroll-hint">Sigue bajando <span aria-hidden="true">↓</span></p>
+  </section>
+
+  <div class="spacer spacer--short" aria-hidden="true"></div>
+
+  <!-- ===== Final: corazón ===== -->
+  <section id="heart-screen" class="screen">
+    <div class="heart reveal" aria-hidden="true"></div>
+    <p class="heart-message reveal">Mi amor por ti se acabará<br>cuando yo ya no quiera programar,<br>contar chistes o bailar.</p>
+  </section>
+
+</main>
+
+<script src="carta2.js"></script>
+</body>
+</html>

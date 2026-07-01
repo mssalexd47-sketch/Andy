@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>Feliz Primer Mes</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500;1,600;1,700&family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- =========================================================
+     SPRITE SVG: gradientes, filtro de brillo y las flores
+     (lirio azul + hoja) reutilizables con <use>.
+     No se muestra directamente, solo define las piezas.
+     ========================================================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="petalGradient" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="115">
+      <stop offset="0%"  stop-color="#f2fbff"/>
+      <stop offset="45%" stop-color="#9fd4f7"/>
+      <stop offset="100%" stop-color="#1f6fb2"/>
+    </radialGradient>
+    <radialGradient id="petalGradientInner" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="95">
+      <stop offset="0%"  stop-color="#ffffff"/>
+      <stop offset="50%" stop-color="#bfe3ff"/>
+      <stop offset="100%" stop-color="#4a9fe0"/>
+    </radialGradient>
+    <linearGradient id="leafGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3a8f86"/>
+      <stop offset="100%" stop-color="#1c4a52"/>
+    </linearGradient>
+    <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Una flor de lirio, centrada en (0,0) -->
+    <symbol id="lilyBloom" viewBox="-130 -130 260 260">
+      <g filter="url(#softGlow)">
+        <!-- verticilo exterior: 3 tépalos -->
+        <g fill="url(#petalGradient)" stroke="#eaf6ff" stroke-width="1" stroke-opacity="0.6">
+          <path d="M0,0 C-19,-15 -24,-58 -7,-100 C-3,-114 3,-114 7,-100 C24,-58 19,-15 0,0 Z" transform="rotate(0)"/>
+          <path d="M0,0 C-19,-15 -24,-58 -7,-100 C-3,-114 3,-114 7,-100 C24,-58 19,-15 0,0 Z" transform="rotate(120)"/>
+          <path d="M0,0 C-19,-15 -24,-58 -7,-100 C-3,-114 3,-114 7,-100 C24,-58 19,-15 0,0 Z" transform="rotate(240)"/>
+        </g>
+        <!-- verticilo interior: 3 tépalos, mas pequeños y claros -->
+        <g fill="url(#petalGradientInner)" stroke="#ffffff" stroke-width="1" stroke-opacity="0.7">
+          <path d="M0,0 C-15,-13 -19,-48 -6,-84 C-2,-96 2,-96 6,-84 C19,-48 15,-13 0,0 Z" transform="rotate(60)"/>
+          <path d="M0,0 C-15,-13 -19,-48 -6,-84 C-2,-96 2,-96 6,-84 C19,-48 15,-13 0,0 Z" transform="rotate(180)"/>
+          <path d="M0,0 C-15,-13 -19,-48 -6,-84 C-2,-96 2,-96 6,-84 C19,-48 15,-13 0,0 Z" transform="rotate(300)"/>
+        </g>
+        <!-- estambres curvos -->
+        <g fill="none" stroke="#e7842f" stroke-width="2.4" stroke-linecap="round">
+          <path d="M0,0 Q10,-30 5,-54" transform="rotate(20)"/>
+          <path d="M0,0 Q10,-30 5,-54" transform="rotate(85)"/>
+          <path d="M0,0 Q10,-30 5,-54" transform="rotate(150)"/>
+          <path d="M0,0 Q10,-30 5,-54" transform="rotate(215)"/>
+          <path d="M0,0 Q10,-30 5,-54" transform="rotate(280)"/>
+          <path d="M0,0 Q10,-30 5,-54" transform="rotate(340)"/>
+        </g>
+        <g fill="#c8571f">
+          <ellipse cx="1.7" cy="-53" rx="3.2" ry="6" transform="rotate(20)"/>
+          <ellipse cx="1.7" cy="-53" rx="3.2" ry="6" transform="rotate(85)"/>
+          <ellipse cx="1.7" cy="-53" rx="3.2" ry="6" transform="rotate(150)"/>
+          <ellipse cx="1.7" cy="-53" rx="3.2" ry="6" transform="rotate(215)"/>
+          <ellipse cx="1.7" cy="-53" rx="3.2" ry="6" transform="rotate(280)"/>
+          <ellipse cx="1.7" cy="-53" rx="3.2" ry="6" transform="rotate(340)"/>
+        </g>
+      </g>
+    </symbol>
+
+    <!-- Una hoja larga y curva -->
+    <symbol id="lilyLeaf" viewBox="0 0 60 200">
+      <path d="M30,200 C10,150 4,90 30,0 C56,90 50,150 30,200 Z" fill="url(#leafGradient)" opacity="0.85"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- Fondo ambiental de destellos -->
+<div class="sparkles" aria-hidden="true"></div>
+
+<!-- =========================================================
+     PANTALLA DE BIENVENIDA
+     ========================================================= -->
+<section id="welcome-screen" class="screen">
+
+  <div class="lily-cluster lily-cluster--top-left" aria-hidden="true">
+    <svg class="leaf leaf--a"><use href="#lilyLeaf"/></svg>
+    <svg class="lily lily--a"><use href="#lilyBloom"/></svg>
+    <svg class="lily lily--b"><use href="#lilyBloom"/></svg>
+  </div>
+
+  <div class="lily-cluster lily-cluster--top-right" aria-hidden="true">
+    <svg class="leaf leaf--b"><use href="#lilyLeaf"/></svg>
+    <svg class="lily lily--c"><use href="#lilyBloom"/></svg>
+  </div>
+
+  <div class="lily-cluster lily-cluster--bottom-left" aria-hidden="true">
+    <svg class="lily lily--d"><use href="#lilyBloom"/></svg>
+  </div>
+
+  <div class="lily-cluster lily-cluster--bottom-right" aria-hidden="true">
+    <svg class="leaf leaf--c"><use href="#lilyLeaf"/></svg>
+    <svg class="lily lily--e"><use href="#lilyBloom"/></svg>
+    <svg class="lily lily--f"><use href="#lilyBloom"/></svg>
+  </div>
+
+  <div class="glass-card welcome-card">
+    <p class="eyebrow">Un detalle para ti...</p>
+    <h1 class="welcome-title">Feliz<br>Primer&nbsp;Mes</h1>
+    <button id="start-btn" class="btn btn--primary" type="button">
+      <span>Leer carta</span>
+    </button>
+  </div>
+</section>
+
+<!-- =========================================================
+     CONTENIDO PRINCIPAL (oculto hasta presionar "Leer carta")
+     ========================================================= -->
+<main id="main-content" class="hidden">
+
+  <!-- Reemplaza musica.mp3 por tu propia canción (mismo nombre de archivo o cambia el "src") -->
+  <audio id="bg-music" src="musica.mp3" loop preload="none"></audio>
+
+  <!-- Control de volumen de la música, visible desde el inicio -->
+  <div class="volume-control volume-control--floating">
+    <span class="volume-icon" id="volume-icon" aria-hidden="true">🔊</span>
+    <input
+      type="range"
+      id="volume-seek"
+      class="audio-seek volume-seek"
+      min="0"
+      max="100"
+      value="70"
+      aria-label="Volumen de la música"
+    >
+  </div>
+
+  <!-- ===== La carta ===== -->
+  <section id="letter-screen" class="screen screen--letter">
+    <div class="glass-card letter-card">
+      <svg class="lily lily--divider" aria-hidden="true"><use href="#lilyBloom"/></svg>
+
+      <p class="eyebrow">Un mes juntos</p>
+
+      <div class="letter-text">
+        <p class="letter-greeting">Querida <span class="fill-in">Andrea</span>,</p>
+        <p>Parece increíble que ya haya pasado un mes desde que empezamos este pequeño gran viaje juntos. Han sido 30 días llenos de risas, de descubrimientos constantes y de un cariño que ha crecido con una fuerza inmensa cada día. Esta primera vez es solo el comienzo; me hace inmensamente feliz saber que estamos construyendo algo real, algo que crece día a día. Gracias por ser tú, simplemente gracias por hacer que estos primeros 30 días sean los más hermosos y especiales de mi vida.</p>
+        <p>No tengo palabras suficientes para decirte cuánto te amo, ni me alcanzan los sentimientos para dimensionar todo este amor que tengo por ti. Pero tú me conoces bien, y sabes perfectamente que yo siempre voy a demostrar lo que siento con acciones, y nunca solo con palabras vacías. Esto que ves aquí es apenas un pequeño reflejo del amor real que te tengo. Me he tomado días enteros haciendo este detalle para ti; es una sorpresa que quizás parezca algo pequeña, quizás para algunos sea una tontería o pienses que alguien más lo pudo haber hecho mejor, pero realmente me he esforzado con el corazón entero solo por ti.</p>
+        <p>Tengo una sorpresa bastante especial para darte el día de hoy cuando termines de leer esto. Tengo cartas para darte, tengo todo mi mundo listo para entregártelo. Solo quiero hacerte feliz, mi amor. Programo para hacerte feliz, aprendo cada día para hacerte feliz, mejoro como persona solo para hacerte feliz. Realmente lo quiero todo a tu lado. Nunca nadie me había dado tanto, nunca me había enamorado —nunca me había enculado, por decirlo a mi manera— de esta forma tan profunda y real.</p>
+        <p>Al principio, confieso que creí que estar contigo iba a ser como el pasado, como estar con alguien con quien terminas y ya, ni modo... Pero cuando empezaron las primeras peleas y sentí ese dolor tan hondo, entendí la verdad: entendí que realmente es contigo. Quiero que sea contigo. Te amo demasiado. Te amo hoy, mañana, siempre, pasado... Te amaré toda la vida.</p>
+        <p>Mi amor por ti se va a acabar únicamente cuando yo ya no quiera seguir aprendiendo, cuando ya no quiera superarme, cuando ya no quiera programar más en esta vida. Eres mi vida hermosa, eres mi amorcito, eres mi pechocha. Yo te amo con el alma, mi amor. En serio, créeme. Créeme que lo daría y lo haría todo por ti; haría lo que sea con tal de verte sonreír. Siento que ya no podría vivir sin ti, no podría estar sin ti, no duraría ni un solo día sin pensarte. Te pienso a cada segundo, te has vuelto la parte más hermosa de mi rutina. Me has formado en este tiempo, y te amo con locura por eso.</p>
+        <p>Eres la mejor de todas. Feliz primer mes, mi vida. Feliz primeros 30 días. Quiero una vida entera contigo. Te amo.</p>
+      </div>
+
+      <p class="letter-signature">Con todo mi cariño,<br><span class="fill-in">Mauricio</span></p>
+    </div>
+
+    <p class="scroll-hint"><h1>Sigue bajando </h6><span aria-hidden="true">↓</span></p>
+  </section>
+
+  <div class="spacer" aria-hidden="true"></div>
+
+  <!-- ===== Final: corazón ===== -->
+  <section id="heart-screen" class="screen">
+    <div class="heart reveal" aria-hidden="true"></div>
+    <p class="heart-message reveal">Mi amor por ti dejará de existir<br>cuando programar no sea para mí....</p>
+
+    <button id="surprise-btn" class="btn btn--gold reveal" type="button">
+      <span>Sorpresa para ti</span>
+    </button>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
